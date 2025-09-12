@@ -38,11 +38,6 @@ const medusaConfig = {
       storeCors: STORE_CORS,
       jwtSecret: JWT_SECRET,
       cookieSecret: COOKIE_SECRET
-    },
-    build: {
-      rollupOptions: {
-        external: ["@medusajs/dashboard"]
-      }
     }
   },
   admin: {
@@ -128,6 +123,7 @@ const medusaConfig = {
             options: {
               apiKey: STRIPE_API_KEY,
               webhookSecret: STRIPE_WEBHOOK_SECRET,
+              capture: true
             },
           },
         ],
@@ -144,13 +140,9 @@ const medusaConfig = {
         },
         settings: {
           products: {
-            type: 'products',
-            enabled: true,
-            fields: ['id', 'title', 'description', 'handle', 'variant_sku', 'thumbnail'],
             indexSettings: {
               searchableAttributes: ['title', 'description', 'variant_sku'],
-              displayedAttributes: ['id', 'handle', 'title', 'description', 'variant_sku', 'thumbnail'],
-              filterableAttributes: ['id', 'handle'],
+              displayedAttributes: ['id', 'title', 'description', 'variant_sku', 'thumbnail', 'handle'],
             },
             primaryKey: 'id',
           }
