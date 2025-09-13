@@ -1,153 +1,65 @@
-import { getCategoriesList } from "@lib/data/categories"
-import { getCollectionsList } from "@lib/data/collections"
-import { Text, clx } from "@medusajs/ui"
-
+import { Text } from "@medusajs/ui"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
-import MedusaCTA from "@modules/layout/components/medusa-cta"
 
 export default async function Footer() {
-  const { collections } = await getCollectionsList(0, 6)
-  const { product_categories } = await getCategoriesList(0, 6)
-
   return (
-    <footer className="border-t border-ui-border-base w-full">
+    <footer className="w-full bg-[#063a68] text-white">
       <div className="content-container flex flex-col w-full">
-        <div className="flex flex-col gap-y-6 xsmall:flex-row items-start justify-between py-40">
-          <div>
-            <LocalizedClientLink
-              href="/"
-              className="txt-compact-xlarge-plus text-ui-fg-subtle hover:text-ui-fg-base uppercase"
-            >
-              Medusa Store
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-y-10 gap-x-10 py-14">
+          <div className="space-y-4">
+            <LocalizedClientLink href="/" className="txt-compact-xlarge-plus uppercase">
+              <span className="font-semibold tracking-wide">Nexus</span>
+              <span className="font-semibold tracking-wide text-[#ff6a00]"> v</span>
             </LocalizedClientLink>
-          </div>
-          <div className="text-small-regular gap-10 md:gap-x-16 grid grid-cols-2 sm:grid-cols-3">
-            {product_categories && product_categories?.length > 0 && (
-              <div className="flex flex-col gap-y-2">
-                <span className="txt-small-plus txt-ui-fg-base">
-                  Categories
-                </span>
-                <ul
-                  className="grid grid-cols-1 gap-2"
-                  data-testid="footer-categories"
-                >
-                  {product_categories?.slice(0, 6).map((c) => {
-                    if (c.parent_category) {
-                      return
-                    }
-
-                    const children =
-                      c.category_children?.map((child) => ({
-                        name: child.name,
-                        handle: child.handle,
-                        id: child.id,
-                      })) || null
-
-                    return (
-                      <li
-                        className="flex flex-col gap-2 text-ui-fg-subtle txt-small"
-                        key={c.id}
-                      >
-                        <LocalizedClientLink
-                          className={clx(
-                            "hover:text-ui-fg-base",
-                            children && "txt-small-plus"
-                          )}
-                          href={`/categories/${c.handle}`}
-                          data-testid="category-link"
-                        >
-                          {c.name}
-                        </LocalizedClientLink>
-                        {children && (
-                          <ul className="grid grid-cols-1 ml-3 gap-2">
-                            {children &&
-                              children.map((child) => (
-                                <li key={child.id}>
-                                  <LocalizedClientLink
-                                    className="hover:text-ui-fg-base"
-                                    href={`/categories/${child.handle}`}
-                                    data-testid="category-link"
-                                  >
-                                    {child.name}
-                                  </LocalizedClientLink>
-                                </li>
-                              ))}
-                          </ul>
-                        )}
-                      </li>
-                    )
-                  })}
-                </ul>
-              </div>
-            )}
-            {collections && collections.length > 0 && (
-              <div className="flex flex-col gap-y-2">
-                <span className="txt-small-plus txt-ui-fg-base">
-                  Collections
-                </span>
-                <ul
-                  className={clx(
-                    "grid grid-cols-1 gap-2 text-ui-fg-subtle txt-small",
-                    {
-                      "grid-cols-2": (collections?.length || 0) > 3,
-                    }
-                  )}
-                >
-                  {collections?.slice(0, 6).map((c) => (
-                    <li key={c.id}>
-                      <LocalizedClientLink
-                        className="hover:text-ui-fg-base"
-                        href={`/collections/${c.handle}`}
-                      >
-                        {c.title}
-                      </LocalizedClientLink>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            <div className="flex flex-col gap-y-2">
-              <span className="txt-small-plus txt-ui-fg-base">Medusa</span>
-              <ul className="grid grid-cols-1 gap-y-2 text-ui-fg-subtle txt-small">
-                <li>
-                  <a
-                    href="https://github.com/medusajs"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="hover:text-ui-fg-base"
-                  >
-                    GitHub
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://docs.medusajs.com"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="hover:text-ui-fg-base"
-                  >
-                    Documentation
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://github.com/medusajs/nextjs-starter-medusa"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="hover:text-ui-fg-base"
-                  >
-                    Source code
-                  </a>
-                </li>
-              </ul>
+            <p className="text-white">
+              "Todo lo que imaginas, a un clic de tu despensa."
+            </p>
+            <div className="flex items-center gap-4 text-lg">
+              <span></span>
+              <span></span>
+              <span></span>
             </div>
           </div>
+
+          <div className="space-y-3">
+            <h3 className="txt-small-plus">Enlaces Rápidos</h3>
+            <ul className="space-y-2 text-white">
+              <li><LocalizedClientLink href="/store">Catálogo</LocalizedClientLink></li>
+              <li><LocalizedClientLink href="/">Programa de Puntos</LocalizedClientLink></li>
+              <li><LocalizedClientLink href="/">Tracking</LocalizedClientLink></li>
+              <li><LocalizedClientLink href="/">Conviértete en Proveedor</LocalizedClientLink></li>
+            </ul>
+          </div>
+
+          <div className="space-y-3">
+            <h3 className="txt-small-plus">Categorías</h3>
+            <ul className="space-y-2 text-white">
+              <li><LocalizedClientLink href="/store">Congelados</LocalizedClientLink></li>
+              <li><LocalizedClientLink href="/store">Huevos</LocalizedClientLink></li>
+              <li><LocalizedClientLink href="/store">Porcelanato</LocalizedClientLink></li>
+              <li><LocalizedClientLink href="/store">Muebles</LocalizedClientLink></li>
+            </ul>
+          </div>
+
+          <div className="space-y-3">
+            <h3 className="txt-small-plus">Contacto</h3>
+            <ul className="space-y-2 text-white">
+              <li>+569 30660016</li>
+              <li>nexusv@gmail.com</li>
+              <li>Coronel, Chile</li>
+            </ul>
+          </div>
         </div>
-        <div className="flex w-full mb-16 justify-between text-ui-fg-muted">
+
+        <div className="border-t border-white/10 pt-6 pb-10 flex flex-col md:flex-row items-center justify-between text-white">
           <Text className="txt-compact-small">
-            © {new Date().getFullYear()} Medusa Store. All rights reserved.
+            © {new Date().getFullYear()} Shalom Chef. Todos los derechos reservados.
           </Text>
-          <MedusaCTA />
+          <div className="flex gap-6 mt-4 md:mt-0">
+            <LocalizedClientLink href="/">Términos y Condiciones</LocalizedClientLink>
+            <LocalizedClientLink href="/">Política de Privacidad</LocalizedClientLink>
+            <LocalizedClientLink href="/">Política de Devoluciones</LocalizedClientLink>
+          </div>
         </div>
       </div>
     </footer>

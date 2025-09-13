@@ -9,7 +9,7 @@ import ErrorMessage from "../error-message"
 import Spinner from "@modules/common/icons/spinner"
 import { placeOrder } from "@lib/data/cart"
 import { HttpTypes } from "@medusajs/types"
-import { isManual, isPaypal, isStripe } from "@lib/constants"
+import { isManual, isPaypal, isStripe, isMercadoPago } from "@lib/constants"
 
 type PaymentButtonProps = {
   cart: HttpTypes.StoreCart
@@ -41,6 +41,14 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
     case isStripe(paymentSession?.provider_id):
       return (
         <StripePaymentButton
+          notReady={notReady}
+          cart={cart}
+          data-testid={dataTestId}
+        />
+      )
+    case isMercadoPago(paymentSession?.provider_id):
+      return (
+        <MercadoPagoPaymentButton
           notReady={notReady}
           cart={cart}
           data-testid={dataTestId}
@@ -81,6 +89,57 @@ const GiftCardPaymentButton = () => {
     </Button>
   )
 }
+const MercadoPagoPaymentButton = ({
+  cart,
+  notReady,
+  "data-testid": dataTestId,
+}: {
+  cart: HttpTypes.StoreCart
+  notReady: boolean
+  "data-testid"?: string
+}) => {
+  const [submitting, setSubmitting] = useState(false)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+
+  const session = cart.payment_collection?.payment_sessions?.find(
+    (s) => s.status === "pending"
+  )
+
+  const handleRedirect = async () => {
+    try {
+      setSubmitting(true)
+      const url = (session?.data as any)?.init_point || (session?.data as any)?.sandbox_init_point
+      if (!url) {
+        setErrorMessage("No se recibió URL de pago de Mercado Pago")
+        setSubmitting(false)
+        return
+      }
+      window.location.href = url as string
+    } catch (e: any) {
+      setErrorMessage(e.message)
+      setSubmitting(false)
+    }
+  }
+
+  return (
+    <>
+      <Button
+        disabled={notReady}
+        isLoading={submitting}
+        onClick={handleRedirect}
+        size="large"
+        data-testid={dataTestId}
+      >
+        Pagar con Mercado Pago
+      </Button>
+      <ErrorMessage
+        error={errorMessage}
+        data-testid="mp-payment-error-message"
+      />
+    </>
+  )
+}
+
 
 const StripePaymentButton = ({
   cart,

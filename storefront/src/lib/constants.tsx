@@ -26,6 +26,10 @@ export const paymentInfoMap: Record<
     title: "PayPal",
     icon: <PayPal />,
   },
+  pp_mercadopago_mercadopago: {
+    title: "Mercado Pago",
+    icon: <CreditCard />,
+  },
   pp_system_default: {
     title: "Manual Payment",
     icon: <CreditCard />,
@@ -42,6 +46,9 @@ export const isPaypal = (providerId?: string) => {
 }
 export const isManual = (providerId?: string) => {
   return providerId?.startsWith("pp_system_default")
+}
+export const isMercadoPago = (providerId?: string) => {
+  return providerId?.startsWith("pp_mercadopago_")
 }
 
 // Add currencies that don't need to be divided by 100

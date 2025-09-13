@@ -126,9 +126,36 @@ const medusaConfig = {
               capture: true
             },
           },
+          ...(process.env.MP_ACCESS_TOKEN ? [{
+            resolve: './src/modules/mercadopago',
+            id: 'mercadopago',
+            options: {
+              accessToken: process.env.MP_ACCESS_TOKEN,
+              notificationUrl: process.env.MP_NOTIFICATION_URL,
+              posId: process.env.MP_POS_ID
+            }
+          }] : [])
         ],
       },
-    }] : [])
+    }] : [
+      {
+        key: Modules.PAYMENT,
+        resolve: '@medusajs/payment',
+        options: {
+          providers: [
+            ...(process.env.MP_ACCESS_TOKEN ? [{
+              resolve: './src/modules/mercadopago',
+              id: 'mercadopago',
+              options: {
+                accessToken: process.env.MP_ACCESS_TOKEN,
+                notificationUrl: process.env.MP_NOTIFICATION_URL,
+                posId: process.env.MP_POS_ID
+              }
+            }] : [])
+          ],
+        },
+      }
+    ])
   ],
   plugins: [
   ...(MEILISEARCH_HOST && MEILISEARCH_ADMIN_KEY ? [{
