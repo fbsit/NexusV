@@ -4,29 +4,27 @@ import { Button, Heading } from "@medusajs/ui"
 const Hero = () => {
   return (
     <div className="h-[75vh] w-full border-b border-ui-border-base relative bg-ui-bg-subtle">
-      <div className="absolute inset-0 z-10 flex flex-col justify-center items-center text-center small:p-32 gap-6">
-        <span>
-          <Heading
-            level="h1"
-            className="text-3xl leading-10 text-ui-fg-base font-normal"
-          >
-            Well done! You have successfully deployed your Medusa 2.0 store on Railway!
-          </Heading>
-          <Heading
-            level="h2"
-            className="text-3xl leading-10 text-ui-fg-subtle font-normal"
-          >
-            Need help customizing your store?
-          </Heading>
-        </span>
-        <a
-          href="https://funkyton.com/medusajs-2-0-is-finally-here/"
-          target="_blank"
+      <div className="absolute inset-0 z-10 flex flex-col justify-center items-start text-left small:p-32 gap-6 ml-6 small:ml-12">
+        <Heading
+          level="h1"
+          className="text-3xl leading-10 text-ui-fg-base font-semibold"
         >
-          <h1 style={{ textDecoration: "underline" }}>
-            Visit the tutorial
-          </h1>
-        </a>
+          Fresco, de calidad y al mejor precio
+        </Heading>
+        <Heading
+          level="h2"
+          className="text-xl leading-8 text-ui-fg-subtle font-normal max-w-xl"
+        >
+          Compra carnes y abarrotes seleccionados con entrega rápida. Ahorra con ofertas semanales y recibe en tu puerta.
+        </Heading>
+        <div className="flex gap-3">
+          <a href="#categorias" className="inline-flex">
+            <Button variant="primary">Explorar categorías</Button>
+          </a>
+          <a href="/search" className="inline-flex">
+            <Button variant="secondary">Buscar productos</Button>
+          </a>
+        </div>
       </div>
     </div>
   )

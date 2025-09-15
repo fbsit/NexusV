@@ -11,7 +11,7 @@ import { StripeCardElementOptions } from "@stripe/stripe-js"
 
 import Divider from "@modules/common/components/divider"
 import PaymentContainer from "@modules/checkout/components/payment-container"
-import { isStripe as isStripeFunc, paymentInfoMap } from "@lib/constants"
+import { isStripe as isStripeFunc, paymentInfoMap, isMercadoPago as isMercadoPagoFunc } from "@lib/constants"
 import { StripeContext } from "@modules/checkout/components/payment-wrapper"
 import { initiatePaymentSession } from "@lib/data/cart"
 
@@ -85,10 +85,10 @@ const Payment = ({
   const handleSubmit = async () => {
     setIsLoading(true)
     try {
-      const shouldInputCard =
-        isStripeFunc(selectedPaymentMethod) && !activeSession
+      const shouldInputCard = isStripeFunc(selectedPaymentMethod) && !activeSession
 
-      if (!activeSession) {
+      // Para Mercado Pago, forzamos la (re)creación de la sesión para generar la preferencia en este paso
+      if (isMercadoPagoFunc(selectedPaymentMethod) || !activeSession) {
         await initiatePaymentSession(cart, {
           provider_id: selectedPaymentMethod,
         })

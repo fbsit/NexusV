@@ -21,6 +21,7 @@ import {
   UpdatePaymentOutput,
   WebhookActionResult,
 } from '@medusajs/framework/types'
+import { BACKEND_URL } from '../../lib/constants'
 
 type MercadoPagoOptions = {
   accessToken: string
@@ -56,6 +57,11 @@ export default class MercadoPagoProviderService extends AbstractPaymentProvider<
       notification_url: this.config.notificationUrl,
       statement_descriptor: 'NexusV',
       auto_return: 'approved',
+      back_urls: {
+        success: `${BACKEND_URL}/api/mercado-pago/return?status=success`,
+        pending: `${BACKEND_URL}/api/mercado-pago/return?status=pending`,
+        failure: `${BACKEND_URL}/api/mercado-pago/return?status=failure`,
+      },
     }
 
     const resp = await fetch('https://api.mercadopago.com/checkout/preferences', {

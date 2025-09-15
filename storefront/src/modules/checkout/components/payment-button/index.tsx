@@ -108,12 +108,32 @@ const MercadoPagoPaymentButton = ({
   const handleRedirect = async () => {
     try {
       setSubmitting(true)
-      const url = (session?.data as any)?.init_point || (session?.data as any)?.sandbox_init_point
+      const getUrl = (s: any): string | undefined =>
+        s?.data?.init_point || s?.data?.sandbox_init_point || s?.init_point || s?.sandbox_init_point
+
+      let url = getUrl(session as any)
+
+      if (!url) {
+        // Reintentar iniciando/actualizando la sesión desde el servidor
+        const providerId = session?.provider_id || "pp_mercadopago_mercadopago"
+        const resp: any = await (async () => {
+          try {
+            return await initiatePaymentSession(cart, { provider_id: providerId })
+          } catch (e) {
+            return null
+          }
+        })()
+
+        // Intentar extraer la url de distintas formas según la respuesta del SDK
+        url = getUrl(resp?.payment_session) || getUrl(resp?.session) || getUrl(resp) || getUrl((resp as any)?.data)
+      }
+
       if (!url) {
         setErrorMessage("No se recibió URL de pago de Mercado Pago")
         setSubmitting(false)
         return
       }
+
       window.location.href = url as string
     } catch (e: any) {
       setErrorMessage(e.message)
